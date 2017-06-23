@@ -1,8 +1,10 @@
-function clickHandler(db)  {
-  let clicks = db.collection('clicks');
+const Clicks = require('../models/clicks');
+
+function ClickHandler()  {
 
   this.addClicks = (req, res) => {
-    clicks.findAndModify({}, {'_id': 1}, {$inc: {'clicks': 1}}, (err, result) => {
+    Clicks.findOneAndUpdate({}, {$inc: {'clicks': 1}})
+    .exec((err, result) => {
       if(err) throw err;
 
       res.json(result);
@@ -10,7 +12,8 @@ function clickHandler(db)  {
   };
 
   this.resetClicks = (req, res) => {
-    clicks.update({}, {'clicks': 0}, (err, result) => {
+    Clicks.findOneAndUpdate({}, {'clicks': 0})
+    .exec((err, result) => {
       if(err) throw err;
 
       res.json(result);
@@ -18,24 +21,23 @@ function clickHandler(db)  {
   };
 
   this.getClicks = (req,res) => {
-    let clickProjection = {'_id': false};
 
-    clicks.findOne({}, clickProjection, (err, result) => {
+    Clicks.findOne({}, {'_id': 0})
+    .exec((err, result) => {
       if(err) throw err;
       if(result){
         res.json(result);
       } else {
-        clicks.insert({'clicks': 0}, err => {
-          if(err) throw err;
-        })
-        clicks.findOne({}, clickProjection, (err, doc) => {
+        let newDoc = new Clicks({ 'clicks': 0});
+        newDoc.save((err, doc)=> {
           if(err) throw err;
 
-          res.json(doc);
+          res,json(doc);
+
         });
-      };
+      }
     });
-  }
+  };
 }
 
-module.exports = clickHandler;
+module.exports = ClickHandler;

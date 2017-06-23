@@ -1,8 +1,9 @@
-const ClickHandler = require(process.cwd() + '/app/controllers/clickHandler.server');
+const path = process.cwd();
+const ClickHandler = require(path + '/app/controllers/clickHandler.server');
 
-module.exports = (app, db) => {
+module.exports = app => {
 
-  let clickHandler = new ClickHandler(db);
+  let clickHandler = new ClickHandler();
   app.route('/').get((req,res) => {
     res.sendFile(process.cwd() + '/public/index.html');
   });
