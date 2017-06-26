@@ -1,18 +1,18 @@
-const Clicks = require('../models/clicks');
+const Clicks = require('../models/users');
 
 function ClickHandler()  {
 
   this.addClicks = (req, res) => {
-    Clicks.findOneAndUpdate({}, {$inc: {'clicks': 1}})
+    Clicks.findOneAndUpdate({'github.id': req.user.github.id}, {$inc: {'nbrClicks.clicks': 1}})
     .exec((err, result) => {
       if(err) throw err;
 
-      res.json(result);
+      res.json(result.nbrClicks);
     });
   };
 
   this.resetClicks = (req, res) => {
-    Clicks.findOneAndUpdate({}, {'clicks': 0})
+    Clicks.findOneAndUpdate({'github.id': req.user.github.id}, {'nbrClicks.clicks': 0})
     .exec((err, result) => {
       if(err) throw err;
 
@@ -22,20 +22,12 @@ function ClickHandler()  {
 
   this.getClicks = (req,res) => {
 
-    Clicks.findOne({}, {'_id': 0})
+    Clicks.findOne({'github.id': req.user.github.id}, {'_id': 0})
     .exec((err, result) => {
       if(err) throw err;
-      if(result){
-        res.json(result);
-      } else {
-        let newDoc = new Clicks({ 'clicks': 0});
-        newDoc.save((err, doc)=> {
-          if(err) throw err;
 
-          res,json(doc);
+        res.json(result.nbrClicks);
 
-        });
-      }
     });
   };
 }

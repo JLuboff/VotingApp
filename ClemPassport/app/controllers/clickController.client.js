@@ -2,49 +2,24 @@
   let addButton = document.querySelector('.btn-add'),
   deleteButton = document.querySelector('.btn-delete'),
   clickNbr = document.querySelector('#click-nbr'),
-  apiUrl = 'http://localhost:8080/api/clicks';
-
-  function ready(fn){
-    if(typeof fn !== 'function'){
-      return;
-    }
-
-    if(document.readyState === 'complete'){
-      return fn();
-    }
-
-    document.addEventListener('DOMContentLoaded', fn, false);
-  }
-
-  function ajaxRequest (method, url, callback) {
-    let xmlhttp = new XMLHttpRequest();
-
-    xmlhttp.onreadystatechange = () => {
-      if(xmlhttp.readyState === 4 && xmlhttp.status === 200) {
-        callback(xmlhttp.response);
-      }
-    };
-
-    xmlhttp.open(method, url, true);
-    xmlhttp.send();
-  }
+  apiUrl = 'http://127.0.0.1:8080/api/:id/clicks';
 
   function updateClickCount (data) {
     let clicksObject = JSON.parse(data);
     clickNbr.innerHTML = clicksObject.clicks;
   }
 
-  ready(ajaxRequest('GET', apiUrl, updateClickCount))
+  ajaxFunctions.ready(ajaxFunctions.ajaxRequest('GET', apiUrl, updateClickCount))
 
   addButton.addEventListener('click', () => {
-    ajaxRequest('POST', apiUrl, () => {
-      ajaxRequest('GET', apiUrl, updateClickCount);
+    ajaxFunctions.ajaxRequest('POST', apiUrl, () => {
+      ajaxFunctions.ajaxRequest('GET', apiUrl, updateClickCount);
     });
   }, false);
 
   deleteButton.addEventListener('click', () => {
-    ajaxRequest('DELETE', apiUrl, ()=> {
-      ajaxRequest('GET', apiUrl, updateClickCount);
+    ajaxFunctions.ajaxRequest('DELETE', apiUrl, ()=> {
+      ajaxFunctions.ajaxRequest('GET', apiUrl, updateClickCount);
     });
   }, false);
 })();
