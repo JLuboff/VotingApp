@@ -1,0 +1,25 @@
+{
+  "name": "votingapp",
+  "version": "1.0.0",
+  "description": "An app to create and vote on polls",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JLuboff/VotingApp.git"
+  },
+  "author": "Jason Luboff",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JLuboff/VotingApp/issues"
+  },
+  "homepage": "https://github.com/JLuboff/VotingApp#readme",
+  "dependencies": {
+    "express": "^4.15.3",
+    "hbs": "^4.0.1",
+    "mongodb": "^2.2.29",
+    "multer": "^1.3.0"
+  }
+}

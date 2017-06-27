@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Create Poll</title>
+  <link rel="stylesheet" type="text/css" href="./css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <h2> Create Poll </h2>
+<form method="POST" enctype="multipart/form-data">
+  <div class="form">
+  <label>Poll Name: </label><input type="text" name="pollName">
+  <label>Option 1: </label><input type="text" name="option1">
+  <label>Option 2: </label><input type="text" name="option2">
+</div>
+  <input type="submit">
+</form>
+<button id="add" class="btn"> Additional Option</button>
+</div>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
+<script src="./js/addpoll.js"></script>
+</body>
+</html>
