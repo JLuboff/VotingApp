@@ -38,6 +38,14 @@ console.log(req.params.id);
     })
   })
 
+  app.get('/', (req, res) => {
+    db.collection('poll').find({}).toArray((err, data) => {
+      if(err) throw err;
+      console.log(data);
+      res.render('allpolls.hbs', {data});
+    })
+  });
+
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });

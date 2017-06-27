@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Create Poll</title>
+  <link rel="stylesheet" type="text/css" href="./css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="column">
+        <h2> FCC-Voting App</h2>
+      </div>
+    </div>
+
+    {{#each data}}
+    <div class="row">
+       <a href="/poll/{{_id}}"> {{pollName}} </a>
+    </div>
+    {{/each}}
+  </div>
+</body>
+</html>
