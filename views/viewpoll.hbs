@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{{pollName}}</title>
+  <link rel="stylesheet" type="text/css" href="../css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="column">
+        <h2> {{pollName}}</h2>
+      </div>
+    </div>
+
+    {{#each options}}
+    <div class="row">
+
+       <p><a href="/poll/voted/{{../id}}/{{@key}}"><button id="{{optionName}}">Vote </button></a>{{optionName}}: {{votes}}</p>
+
+    </div>
+    {{/each}}
+    <div class="row">
+      <canvas id="pollResults" width="300" height="400"></canvas>
+    </div>
+  </div>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.js"></script>
+  <script>
+  var randomColorGen = () =>  Math.ceil(Math.random() * 255)
+  $.getJSON(`/voteResults/{{id}}`, (data) => {
+  let labels = [];
+  let votes = [];
+  let colors = [];
+  let ctx = document.getElementById('pollResults').getContext('2d');
+
+  for(let i in data) {
+    labels.push(data[i].optionName);
+    votes.push(data[i].votes);
+    colors.push('rgba('+ randomColorGen() +', ' + randomColorGen() + ', ' + randomColorGen() +', 1.0)');
+  }
+
+  let chart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Total Votes',
+        data: votes,
+        backgroundColor: colors
+      }]
+    },
+    options: {
+      responsive: false
+    }
+  });
+  });
+  </script>
+</body>
+</html>
