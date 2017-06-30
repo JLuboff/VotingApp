@@ -18,9 +18,11 @@
   "homepage": "https://github.com/JLuboff/VotingApp#readme",
   "dependencies": {
     "express": "^4.15.3",
+    "express-session": "^1.15.3",
     "hbs": "^4.0.1",
     "moment": "^2.18.1",
     "mongodb": "^2.2.29",
-    "multer": "^1.3.0"
+    "multer": "^1.3.0",
+    "parseurl": "^1.3.1"
   }
 }

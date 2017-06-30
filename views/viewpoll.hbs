@@ -29,7 +29,41 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.js"></script>
   <script>
   var randomColorGen = () =>  Math.ceil(Math.random() * 255)
-  $.getJSON(`/voteResults/{{id}}`, (data) => {
+  $.ajax({
+    url: `/voteResults/{{id}}`,
+    method: "GET",
+    success: (data) => {
+      let labels = [];
+      let votes = [];
+      let colors = [];
+      let ctx = document.getElementById('pollResults').getContext('2d');
+
+      for(let i in data) {
+        labels.push(data[i].optionName);
+        votes.push(data[i].votes);
+        colors.push('rgba('+ randomColorGen() +', ' + randomColorGen() + ', ' + randomColorGen() +', 1.0)');
+      }
+
+      let chart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Total Votes',
+            data: votes,
+            backgroundColor: colors
+          }]
+        },
+        options: {
+          responsive: false
+        }
+      });
+    },
+    error: () => {
+      alert('You have already voted.');
+    }
+  })
+/*  $.getJSON(`/voteResults/{{id}}`, (data) => {
   let labels = [];
   let votes = [];
   let colors = [];
@@ -54,8 +88,8 @@
     options: {
       responsive: false
     }
-  });
-  });
+  }); */
+//  });
   </script>
 </body>
 </html>
