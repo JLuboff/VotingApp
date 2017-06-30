@@ -74,9 +74,12 @@ MongoClient.connect(`mongodb://${process.env.MONGOUSER}:${process.env.MONGOPASS}
 
     let option = {};
     option[req.params.key + '.votes'] = 1;
-    console.log(option);
-    db.collection('poll').findOneAndUpdate({'_id': ObjectID(req.params.id)}, {$addToSet: {ipAddresses: req.headers['x-forwarded-for']}});
+
+    db.collection('poll').findOne({'_id': ObjectID(req.params.id), 'ipAddresses': {$in: [req.headers['x-forwarded-for']]}}, (err, doc) =>{
+      console.log(doc);
+    })
     db.collection('poll').findOneAndUpdate({'_id': ObjectID(req.params.id)}, {$inc: option});
+    db.collection('poll').findOneAndUpdate({'_id': ObjectID(req.params.id)}, {$addToSet: {ipAddresses: req.headers['x-forwarded-for']}});
     res.redirect(`/poll/${req.params.id}`);
   })
 
