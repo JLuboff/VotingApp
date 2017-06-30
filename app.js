@@ -74,7 +74,7 @@ MongoClient.connect(`mongodb://${process.env.MONGOUSER}:${process.env.MONGOPASS}
 
     let option = {};
     option[req.params.key + '.votes'] = 1;
-
+    console.log(option);
     db.collection('poll').findOneAndUpdate({'_id': ObjectID(req.params.id)}, {$inc: option, {$push: {ipAddresses: req.headers['x-forwarded-for']}});
     res.redirect(`/poll/${req.params.id}`);
   })
