@@ -10,9 +10,7 @@ passport = require('passport'),
 GitHubStrategy = require('passport-github').Strategy,
 port = process.env.PORT || 3000;
 
-var app = express();
-let storage = multer.diskStorage({});
-let upload = multer({storage});
+
 
 passport.use(new GitHubStrategy({
   clientID: '77fa317a2ef081047413',
@@ -36,11 +34,15 @@ passport.deserializeUser((obj, cb) => {
   cb(null, obj);
 });
 
+var app = express();
+let storage = multer.diskStorage({});
+let upload = multer({storage});
+
 app.set('view engine', 'hbs');
 
-/*app.use(session({
+app.use(session({
 secret: 'potato',
-resave: false,
+resave: true,
 saveUnitialized: true
 }));
 app.use((req, res, next) => {
@@ -57,7 +59,7 @@ views[pathname] = (views[pathname] || 0) + 1;
 
 next();
 
-}); */
+});
 app.use(express.static(__dirname + '/public'));
 
 
@@ -65,12 +67,23 @@ app.use(express.static(__dirname + '/public'));
 app.use(passport.initialize());
 app.use(passport.session());
 
+const isLogged = (req, res, next) => {
+  if(req.isAuthenticated()){
+    console.log(`User is authenticated`);
+    return next();
+  }
+  console.log(`User is not authenticated`);
+return res.redirect('/auth/github');
+};
+
 MongoClient.connect(`mongodb://localhost:27017/polls`, (err, db)=>{
   if(err) throw err;
 
-  app.get('/addpoll', passport.authenticate('github'), (req, res) => {
+  app.get('/addpoll', isLogged, (req, res) => {
     res.render('addpoll.hbs');
   });
+
+  app.get('/auth/github', passport.authenticate('github'));
 
   app.get('/auth/github/callback', passport.authenticate('github', { failureRedirect: '/'}),(req, res) =>{
     res.redirect('/addpoll');
@@ -100,23 +113,24 @@ MongoClient.connect(`mongodb://localhost:27017/polls`, (err, db)=>{
 
   app.get('/poll/voted/:id/:key', (req, res) => {
     let url = parseurl(req).pathname;
-    console.log(req.headers);
+  /*  req.session.views = Object.keys(req.session.views).filter(el => !el.includes('/css/style.css'));
+     db.collection('sessions').insertMany(req.session.views); */
 
-    /*if(Object.keys(req.session.views).filter(el => el.includes(url.slice(0,37))).length > 1 || req.session.views[url] > 1){
+    if(Object.keys(req.session.views).filter(el => el.includes(url.slice(0,37))).length > 1 || req.session.views[url] > 1){
 
       return res.redirect(`/poll/${req.params.id}`);
-    } */
+    }
 
     let option = {};
     option[req.params.key + '.votes'] = 1;
 
-    db.collection('poll').findOne({'_id': ObjectID(req.params.id), 'ipAddresses': {$in: [req.headers['x-forwarded-for']]}}, (err, doc) =>{
+  /*  db.collection('poll').findOne({'_id': ObjectID(req.params.id), 'ipAddresses': {$in: [req.headers['x-forwarded-for']]}}, (err, doc) =>{
       if(doc) {
        res.redirect(`/poll/${req.params.id}`);
       }
-    })
+    }) */
     db.collection('poll').findOneAndUpdate({'_id': ObjectID(req.params.id)}, {$inc: option});
-    db.collection('poll').findOneAndUpdate({'_id': ObjectID(req.params.id)}, {$addToSet: {ipAddresses: req.headers['x-forwarded-for']}});
+  //  db.collection('poll').findOneAndUpdate({'_id': ObjectID(req.params.id)}, {$addToSet: {ipAddresses: req.headers['x-forwarded-for']}});
     res.redirect(`/poll/${req.params.id}`);
   })
 
