@@ -4,15 +4,40 @@ MongoClient = require('mongodb').MongoClient,
 ObjectID = require('mongodb').ObjectID,
 multer = require('multer'),
 moment = require('moment'),
-//  session = require('express-session'),
+session = require('express-session'),
 parseurl = require('parseurl'),
+passport = require('passport'),
+GitHubStrategy = require('passport-github').Strategy,
 port = process.env.PORT || 3000;
 
 var app = express();
 let storage = multer.diskStorage({});
 let upload = multer({storage});
 
+passport.use(new GitHubStrategy({
+  clientID: '77fa317a2ef081047413',
+  clientSecret: '3980498d72be0703a56587dddbe65da702457631',
+  callbackURL: 'http://127.0.0.1:3000/auth/github/callback'
+}, (accessToken, refreshToken, profile, cb) => {
+    if(profile) {
+      user = profile;
+      return cb(null, user);
+    } else {
+      return done(null, false);
+    };
+  }
+));
+
+passport.serializeUser((user, cb) => {
+  cb(null, user);
+});
+
+passport.deserializeUser((obj, cb) => {
+  cb(null, obj);
+});
+
 app.set('view engine', 'hbs');
+
 /*app.use(session({
 secret: 'potato',
 resave: false,
@@ -34,12 +59,22 @@ next();
 
 }); */
 app.use(express.static(__dirname + '/public'));
-MongoClient.connect(`mongodb://${process.env.MONGOUSER}:${process.env.MONGOPASS}@ds064299.mlab.com:64299/polls`, (err, db)=>{
+
+
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+MongoClient.connect(`mongodb://localhost:27017/polls`, (err, db)=>{
   if(err) throw err;
 
-  app.get('/addpoll', (req, res) => {
+  app.get('/addpoll', passport.authenticate('github'), (req, res) => {
     res.render('addpoll.hbs');
   });
+
+  app.get('/auth/github/callback', passport.authenticate('github', { failureRedirect: '/'}),(req, res) =>{
+    res.redirect('/addpoll');
+  })
 
   app.post('/addpoll', upload.array(), (req, res) => {
     let poll = {
@@ -77,7 +112,7 @@ MongoClient.connect(`mongodb://${process.env.MONGOUSER}:${process.env.MONGOPASS}
 
     db.collection('poll').findOne({'_id': ObjectID(req.params.id), 'ipAddresses': {$in: [req.headers['x-forwarded-for']]}}, (err, doc) =>{
       if(doc) {
-      return res.redirect(`/poll/${req.params.id}`);
+       res.redirect(`/poll/${req.params.id}`);
       }
     })
     db.collection('poll').findOneAndUpdate({'_id': ObjectID(req.params.id)}, {$inc: option});
