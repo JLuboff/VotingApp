@@ -1,3 +1,25 @@
-.container {
+.container-fluid {
   text-align: center;
+}
+
+body {
+  margin-top: 50px;
+  background-color: #F1F2EB;
+}
+
+.navbar-brand {
+  color: #331832 !important;
+}
+
+.text {
+  color: #395e66;
+}
+
+.navbar {
+  background-color: #D8DAD3 !important;
+}
+
+.btn {
+  background-color: #A4C2A5;
+  width: 50%;
 }

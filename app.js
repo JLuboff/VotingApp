@@ -116,6 +116,8 @@ MongoClient.connect(`mongodb://localhost:27017/polls`, (err, db)=>{
   /*  req.session.views = Object.keys(req.session.views).filter(el => !el.includes('/css/style.css'));
      db.collection('sessions').insertMany(req.session.views); */
 
+//Use $match if I can get into database
+
     if(Object.keys(req.session.views).filter(el => el.includes(url.slice(0,37))).length > 1 || req.session.views[url] > 1){
 
       return res.redirect(`/poll/${req.params.id}`);

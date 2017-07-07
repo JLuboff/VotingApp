@@ -3,25 +3,53 @@
 <head>
   <meta charset="utf-8">
   <title>Create Poll</title>
-  <link rel="stylesheet" type="text/css" href="./css/style.css">
+
+<!--  <link rel="stylesheet" type="text/css" href="./css/style.css"> -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.3/css/bulma.css" type="text/css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet">
 </head>
 <body>
-  <div class="container">
-    <div class="row">
-      <div class="column">
-        <h2> FCC-Voting App</h2>
-      </div>
-      <div class="column">
-        <h4><a href="/addpoll">Add Poll</a></h4>
-      </div>
+  <section class="hero is-primary is-medium">
+    <div class="hero-head">
+      <header class="nav">
+        <div class="container">
+          <div class="nav-left">
+            <a class="nav-item" href="#">FCC-Voting</a>
+          </div>
+          <div class="nav-right">
+            <a class="nav-item" href="/addpoll">Add poll</a>
+            <a class="nav-item" href="/login">Login</a>
+          </div>
+        </div>
+      </header>
     </div>
-
-    {{#each data}}
-    <div class="row">
-       <a href="/poll/{{_id}}"> {{pollName}} </a>
+  </section>
+    <!--
+  <nav class="navbar is-primary">
+      <div class="navbar-brand">
+      <a class="navbar-item" href="#">FCC-Voting</a>
     </div>
-    {{/each}}
+    <div class="navbar-menu">
+      <div class="navbar-start">
+      <a class="navbar-item" href="/addpoll">Add poll</a>
+    </div>
   </div>
+</nav> -->
+
+    <div class="columns">
+      <div class="column is-half is-offset-one-quarter">
+        <h2 class="text"> Select a poll below</h2>
+      </div>
+</div>
+  <div class="columns is-multiline is-gapless">
+    {{#each data}}
+    <div class="column is-3"></div>
+    <div class="column is-6">
+       <a class="button is-primary is-medium is-outlined" href="/poll/{{_id}}"> {{pollName}} </a>
+    </div>
+    <div class="column is-3"></div>
+
+    {{/each}}
+</div>
 </body>
 </html>
