@@ -18,7 +18,11 @@
           </div>
           <div class="nav-right">
             <a class="nav-item" href="/addpoll">Add poll</a>
-            <a class="nav-item" href="/login">Login</a>
+            {{#if user}}
+            <a class="nav-item" href="/logout">{{user}} Logout</a>
+            {{else}}
+            <a class="nav-item" href="/login"> Login</a>
+            {{/if}}
           </div>
         </div>
       </header>
@@ -38,7 +42,7 @@
 
     <div class="columns">
       <div class="column is-half is-offset-one-quarter">
-        <h2 class="text"> Select a poll below</h2>
+        <h2 class="text"> Select a poll below {{user}}</h2>
       </div>
 </div>
   <div class="columns is-multiline is-gapless">

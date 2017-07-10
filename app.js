@@ -83,10 +83,10 @@ MongoClient.connect(`mongodb://localhost:27017/polls`, (err, db)=>{
     res.render('addpoll.hbs');
   });
 
-  app.get('/auth/github', passport.authenticate('github'));
+  app.get('/login', passport.authenticate('github'));
 
   app.get('/auth/github/callback', passport.authenticate('github', { failureRedirect: '/'}),(req, res) =>{
-    res.redirect('/addpoll');
+    res.redirect('/');
   })
 
   app.post('/addpoll', upload.array(), (req, res) => {
@@ -156,9 +156,14 @@ MongoClient.connect(`mongodb://localhost:27017/polls`, (err, db)=>{
   })
 
   app.get('/', (req, res) => {
+    console.log(req.user);
+    var user = undefined;
+    if(req.user !== undefined){ console.log(`Not undefined: ${req.user._json.name}`);
+    user = req.user._json.name};
+    //console.log(user);
     db.collection('poll').find({}).sort({time: 1}).toArray((err, data) => {
       if(err) throw err;
-      res.render('allpolls.hbs', {data});
+      res.render('allpolls.hbs', {data, user});
     })
   });
 
