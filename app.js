@@ -73,7 +73,7 @@ const isLogged = (req, res, next) => {
     return next();
   }
   console.log(`User is not authenticated`);
-return res.redirect('/auth/github');
+return res.redirect('/login');
 };
 
 MongoClient.connect(`mongodb://localhost:27017/polls`, (err, db)=>{
@@ -81,6 +81,11 @@ MongoClient.connect(`mongodb://localhost:27017/polls`, (err, db)=>{
 
   app.get('/addpoll', isLogged, (req, res) => {
     res.render('addpoll.hbs');
+  });
+
+  app.get('/logout', (req,res) => {
+    req.logout();
+    res.redirect('/');
   });
 
   app.get('/login', passport.authenticate('github'));
@@ -113,10 +118,10 @@ MongoClient.connect(`mongodb://localhost:27017/polls`, (err, db)=>{
 
   app.get('/poll/voted/:id/:key', (req, res) => {
     let url = parseurl(req).pathname;
-  /*  req.session.views = Object.keys(req.session.views).filter(el => !el.includes('/css/style.css'));
-     db.collection('sessions').insertMany(req.session.views); */
+    /*  req.session.views = Object.keys(req.session.views).filter(el => !el.includes('/css/style.css'));
+    db.collection('sessions').insertMany(req.session.views); */
 
-//Use $match if I can get into database
+    //Use $match if I can get into database
 
     if(Object.keys(req.session.views).filter(el => el.includes(url.slice(0,37))).length > 1 || req.session.views[url] > 1){
 
@@ -126,17 +131,21 @@ MongoClient.connect(`mongodb://localhost:27017/polls`, (err, db)=>{
     let option = {};
     option[req.params.key + '.votes'] = 1;
 
-  /*  db.collection('poll').findOne({'_id': ObjectID(req.params.id), 'ipAddresses': {$in: [req.headers['x-forwarded-for']]}}, (err, doc) =>{
-      if(doc) {
-       res.redirect(`/poll/${req.params.id}`);
-      }
-    }) */
-    db.collection('poll').findOneAndUpdate({'_id': ObjectID(req.params.id)}, {$inc: option});
-  //  db.collection('poll').findOneAndUpdate({'_id': ObjectID(req.params.id)}, {$addToSet: {ipAddresses: req.headers['x-forwarded-for']}});
+    /*  db.collection('poll').findOne({'_id': ObjectID(req.params.id), 'ipAddresses': {$in: [req.headers['x-forwarded-for']]}}, (err, doc) =>{
+    if(doc) {
     res.redirect(`/poll/${req.params.id}`);
-  })
+  }
+}) */
+db.collection('poll').findOneAndUpdate({'_id': ObjectID(req.params.id)}, {$inc: option});
+    //  db.collection('poll').findOneAndUpdate({'_id': ObjectID(req.params.id)}, {$addToSet: {ipAddresses: req.headers['x-forwarded-for']}});
+    res.redirect(`/poll/${req.params.id}`);
+})
 
   app.get('/poll/:id', (req, res) => {
+    var user, avatar;
+    if(req.user !== undefined){ console.log(`Not undefined: ${req.user._json.name}`);
+    user = req.user._json.name;
+    avatar = req.user._json.avatar_url;};
 
     db.collection('poll').findOne({'_id': ObjectID(req.params.id)}, {'_id': 0, 'time': 0, 'ipAddresses': 0}, (err, doc) => {
       if (err) throw err;
@@ -151,19 +160,20 @@ MongoClient.connect(`mongodb://localhost:27017/polls`, (err, db)=>{
         }
       };
 
-      res.render('viewpoll.hbs', {pollName, options, id});
+      res.render('viewpoll.hbs', {pollName, options, id, user, avatar});
     })
   })
 
   app.get('/', (req, res) => {
     console.log(req.user);
-    var user = undefined;
+    var user, avatar;
     if(req.user !== undefined){ console.log(`Not undefined: ${req.user._json.name}`);
-    user = req.user._json.name};
+    user = req.user._json.name;
+    avatar = req.user._json.avatar_url;};
     //console.log(user);
     db.collection('poll').find({}).sort({time: 1}).toArray((err, data) => {
       if(err) throw err;
-      res.render('allpolls.hbs', {data, user});
+      res.render('allpolls.hbs', {data, user, avatar});
     })
   });
 
