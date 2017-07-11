@@ -9,39 +9,35 @@
   <link href="https://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet">
 </head>
 <body>
-  <section class="hero is-primary is-fullheight">
-    <div class="hero-head">
-      <header class="nav">
-        <div class="container">
-          <div class="nav-left">
-            <a class="nav-item" href="/">FCC-Voting</a>
-          </div>
-          <div class="nav-right">
-            <a class="nav-item" href="/addpoll">Add poll</a>
+
+      <nav class="navbar is-primary">
+          <div class="navbar-menu">
+            <div class="navbar-brand">
+              <a class="navbar-item" href="/">FCC-Voting</a>
+            </div>
+            <div class="navbar-end">
+            <a class="navbar-item" href="/addpoll">Add poll</a>
             {{#if user}}
-            <p class="nav-item"><img src="{{avatar}}" />&nbsp; {{user}}
-            </p>
-            <a class="nav-item" href="/logout">Logout</a>
+            <div class="navbar-item has-dropdown is-hoverable">
+              <a class="navbar-link is-active" href="#">
+            <p class="navbar-item"><img src="{{avatar}}" />&nbsp; {{user}}
+            </p></a>
+            <div class="navbar-dropdown ">
+              <a class="navbar-item" href="/createdPolls">Created Polls</a>
+              <a class="navbar-item" href="/profile">Profile</a>
+              <hr class="navbar-divider">
+              <a class="navbar-item" href="/logout">Logout</a>
+            </div>
+          </div>
             {{else}}
-            <a class="nav-item" href="/login"> Login</a>
+            <a class="navbar-item" href="/login"> Login</a>
             {{/if}}
           </div>
         </div>
-      </header>
-    </div>
+      </nav>
 
-    <!--
-  <nav class="navbar is-primary">
-      <div class="navbar-brand">
-      <a class="navbar-item" href="#">FCC-Voting</a>
-    </div>
-    <div class="navbar-menu">
-      <div class="navbar-start">
-      <a class="navbar-item" href="/addpoll">Add poll</a>
-    </div>
-  </div>
-</nav> -->
-
+<section class="hero is-primary is-fullheight">
+  <div class="hero-head">
     <div class="columns">
       <div class="column is-half is-offset-one-quarter content">
         <h1 class="notification is-primary has-text-centered"> Select a poll below {{user}}</h1>
@@ -66,7 +62,7 @@
     </div>
   </div>
 </footer>
-
+</div>
 </section>
 </body>
 </html>

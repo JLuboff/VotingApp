@@ -80,7 +80,11 @@ MongoClient.connect(`mongodb://localhost:27017/polls`, (err, db)=>{
   if(err) throw err;
 
   app.get('/addpoll', isLogged, (req, res) => {
-    res.render('addpoll.hbs');
+    var user, avatar;
+    if(req.user !== undefined){ console.log(`Not undefined: ${req.user._json.name}`);
+    user = req.user._json.name;
+    avatar = req.user._json.avatar_url;};
+    res.render('addpoll.hbs', {user, avatar});
   });
 
   app.get('/logout', (req,res) => {

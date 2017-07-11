@@ -3,23 +3,64 @@
 <head>
   <meta charset="utf-8">
   <title>Create Poll</title>
-  <link rel="stylesheet" type="text/css" href="./css/style.css">
-  <link href="https://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.3/css/bulma.css" type="text/css" rel="stylesheet">
+
 </head>
 <body>
-  <div class="container">
+  <section class="hero is-primary is-fullheight">
+    <div class="hero-head">
+      <header class="nav">
+        <div class="container">
+          <div class="nav-left">
+            <a class="nav-item" href="/">FCC-Voting</a>
+          </div>
+          <div class="nav-right">
+            <a class="nav-item" href="/addpoll">Add poll</a>
+            {{#if user}}
+            <p class="nav-item"><img src="{{avatar}}" />&nbsp; {{user}}
+            </p>
+            <a class="nav-item" href="/logout">Logout</a>
+            {{else}}
+            <a class="nav-item" href="/login"> Login</a>
+            {{/if}}
+          </div>
+        </div>
+      </header>
+    </div>
+  <div class="columns">
+    <div class="column is-6 is-offset-3 content">
     <h2> Create Poll </h2>
+  </div>
+</div>
+<div class="columns">
+  <div class="column is-6 is-offset-3 content">
 <form method="POST" enctype="multipart/form-data">
-  <div class="form">
-  <label>Poll Name: </label><input type="text" name="pollName">
-  <label>Option 1: </label><input type="text" name="option1">
-  <label>Option 2: </label><input type="text" name="option2">
+  <div class="form control">
+  <label class="label">Poll Name: </label><input class="input is-medium" type="text" name="pollName" /required>
+  <label class="label">Option 1: </label><input class="input is-medium" type="text" name="option1" /required>
+  <label class="label">Option 2: </label><input class="input is-medium" type="text" name="option2" /required>
 </div>
-  <input type="submit">
-</form>
-<button id="add" class="btn"> Additional Option</button>
-</div>
+<!--  <input type="submit"> -->
+<button class="button is-primary is-inverted is-outlined is-medium" style="margin-top: 10px;">Create Poll</button>
 
+</form>
+
+</div>
+</div>
+<div class="columns">
+  <div class="column is-6 is-offset-3 content">
+<button id="add" class="button is-primary is-inverted is-outlined"> Additional Option</button>
+</div>
+</div>
+<footer class="footer">
+<div class="container">
+  <div class="content has-text-centered">
+    <h6>Created by <a href="#">Jason Luboff</a></h6>
+  </div>
+</div>
+</footer>
+
+</section>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
 <script src="./js/addpoll.js"></script>
 </body>
