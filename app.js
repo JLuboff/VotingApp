@@ -11,9 +11,9 @@ const express = require('express'),
       port = process.env.PORT || 3000;
 
 passport.use(new GitHubStrategy({
-  clientID: '77fa317a2ef081047413',
-  clientSecret: '3980498d72be0703a56587dddbe65da702457631',
-  callbackURL: 'http://127.0.0.1:3000/auth/github/callback'
+  clientID: process.env.CLIENTID,
+  clientSecret: process.env.CLIENTSECRET,
+  callbackURL: process.env.CALLBACKURL
 }, (accessToken, refreshToken, profile, cb) => {
     if(profile) {
       user = profile;
@@ -39,7 +39,7 @@ let upload = multer({storage});
 app.set('view engine', 'hbs');
 
 app.use(session({
-  secret: 'potato',
+  secret: process.env.SESSION,
   resave: true,
   saveUnitialized: true
 }));
