@@ -2,12 +2,11 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>FCC-Voting App</title>
-
-  <!--  <link rel="stylesheet" type="text/css" href="./css/style.css"> -->
+  <title>Polls Created by {{user}}</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.3/css/bulma.css" type="text/css" rel="stylesheet">
 </head>
 <body>
+
   <nav class="navbar is-primary">
     <div class="container">
       <div class="navbar-menu">
@@ -36,11 +35,11 @@
       </div>
     </nav>
 
-    <section class="hero is-primary is-large">
+    <section class="hero is-primary is-fullheight">
       <div class="hero-head">
         <div class="columns">
           <div class="column is-half is-offset-one-quarter content">
-            <h1 class="notification is-primary has-text-centered"> Select a poll below {{user}}</h1>
+            <h1 class="notification is-primary has-text-centered"> All polls created by: {{user}}</h1>
           </div>
         </div>
         <div class="columns is-multiline is-gapless has-text-centered">
@@ -48,6 +47,8 @@
           <div class="column is-3"></div>
           <div class="column is-6">
             <a class="button is-large is-inverted is-primary is-outlined" href="/poll/{{_id}}"> {{pollName}} </a>
+            <span class="tag">Delete<a class="delete" href="/deletepoll/{{_id}}"></a></span>
+
           </div>
           <div class="column is-3"></div>
 
@@ -63,6 +64,8 @@
         </div>
       </div>
     </footer>
+  </div>
+</section>
 
-  </body>
-  </html>
+</body>
+</html>

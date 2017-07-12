@@ -1,16 +1,14 @@
 const express = require('express'),
-hbs = require('hbs'),
-MongoClient = require('mongodb').MongoClient,
-ObjectID = require('mongodb').ObjectID,
-multer = require('multer'),
-moment = require('moment'),
-session = require('express-session'),
-parseurl = require('parseurl'),
-passport = require('passport'),
-GitHubStrategy = require('passport-github').Strategy,
-port = process.env.PORT || 3000;
-
-
+      hbs = require('hbs'),
+      MongoClient = require('mongodb').MongoClient,
+      ObjectID = require('mongodb').ObjectID,
+      multer = require('multer'),
+      moment = require('moment'),
+      session = require('express-session'),
+      parseurl = require('parseurl'),
+      passport = require('passport'),
+      GitHubStrategy = require('passport-github').Strategy,
+      port = process.env.PORT || 3000;
 
 passport.use(new GitHubStrategy({
   clientID: '77fa317a2ef081047413',
@@ -41,29 +39,26 @@ let upload = multer({storage});
 app.set('view engine', 'hbs');
 
 app.use(session({
-secret: 'potato',
-resave: true,
-saveUnitialized: true
+  secret: 'potato',
+  resave: true,
+  saveUnitialized: true
 }));
 app.use((req, res, next) => {
 
-let views = req.session.views;
+  let views = req.session.views;
 
-if(!views){
-views = req.session.views = {};
-}
+  if(!views){
+    views = req.session.views = {};
+  }
 
-let pathname = parseurl(req).pathname;
+  let pathname = parseurl(req).pathname;
 
-views[pathname] = (views[pathname] || 0) + 1;
+  views[pathname] = (views[pathname] || 0) + 1;
 
-next();
+  next();
 
 });
 app.use(express.static(__dirname + '/public'));
-
-
-
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -73,10 +68,11 @@ const isLogged = (req, res, next) => {
     return next();
   }
   console.log(`User is not authenticated`);
-return res.redirect('/login');
+  return res.redirect('/login');
 };
 
-MongoClient.connect(`mongodb://localhost:27017/polls`, (err, db)=>{
+MongoClient.connect(`mongodb://${process.env.MONGOUSER}:${process.env.MONGOPASS}@ds064299.mlab.com:64299/polls`, (err, db)=>{
+
   if(err) throw err;
 
   app.get('/addpoll', isLogged, (req, res) => {
@@ -102,7 +98,8 @@ MongoClient.connect(`mongodb://localhost:27017/polls`, (err, db)=>{
     let poll = {
       time: moment().format(),
       pollName: req.body.pollName,
-      ipAddresses: []
+      //ipAddresses: []
+      creator: req.user.id
     }
 
     for(let i in req.body){
@@ -151,9 +148,9 @@ db.collection('poll').findOneAndUpdate({'_id': ObjectID(req.params.id)}, {$inc: 
     user = req.user._json.name;
     avatar = req.user._json.avatar_url;};
 
-    db.collection('poll').findOne({'_id': ObjectID(req.params.id)}, {'_id': 0, 'time': 0, 'ipAddresses': 0}, (err, doc) => {
+    db.collection('poll').findOne({'_id': ObjectID(req.params.id)}, {'_id': 0, 'time': 0, 'creator': 0}, (err, doc) => {
       if (err) throw err;
-
+        console.log(doc);
       let pollName = doc.pollName;
       let id = req.params.id;
       let options = {};
@@ -166,6 +163,11 @@ db.collection('poll').findOneAndUpdate({'_id': ObjectID(req.params.id)}, {$inc: 
 
       res.render('viewpoll.hbs', {pollName, options, id, user, avatar});
     })
+  })
+
+  app.get('/deletepoll/:id', (req,res) => {
+    db.collection('poll').remove({'_id': ObjectID(req.params.id)});
+   res.redirect('/createdpolls');
   })
 
   app.get('/', (req, res) => {
@@ -182,7 +184,7 @@ db.collection('poll').findOneAndUpdate({'_id': ObjectID(req.params.id)}, {$inc: 
   });
 
   app.get('/voteResults/:id', (req, res) => {
-    db.collection('poll').findOne({'_id': ObjectID(req.params.id)}, {'_id': 0, 'time': 0, 'pollName': 0, 'ipAddresses': 0}, (err, doc) => {
+    db.collection('poll').findOne({'_id': ObjectID(req.params.id)}, {'_id': 0, 'time': 0, 'pollName': 0, 'ipAddresses': 0, 'creator': 0}, (err, doc) => {
       if(err) throw err;
 
       res.setHeader('Content-Type', 'application/json');
@@ -190,6 +192,19 @@ db.collection('poll').findOneAndUpdate({'_id': ObjectID(req.params.id)}, {$inc: 
       res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 
       res.send(doc);
+    })
+  })
+
+  app.get('/createdpolls', isLogged, (req, res) => {
+
+    let user = req.user._json.name;
+    let avatar = req.user._json.avatar_url;
+    let id = req.user.id;
+    console.log(id);
+    db.collection('poll').find({creator: id}).toArray((err, data) => {
+      if(err) throw err;
+
+      res.render('createdpolls.hbs', {data, user, avatar});
     })
   })
 

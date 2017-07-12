@@ -3,129 +3,110 @@
 <head>
   <meta charset="utf-8">
   <title>{{pollName}}</title>
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.3/css/bulma.css" type="text/css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.3/css/bulma.css" type="text/css" rel="stylesheet">
 </head>
 <body>
-  <section class="hero is-primary is-fullheight">
-    <div class="hero-head">
-      <header class="nav">
-        <div class="container">
-          <div class="nav-left">
-            <a class="nav-item" href="/">FCC-Voting</a>
-          </div>
-          <div class="nav-right">
-            <a class="nav-item" href="/addpoll">Add poll</a>
-            {{#if user}}
-            <p class="nav-item"><img src="{{avatar}}" />&nbsp; {{user}}
-            </p>
-            <a class="nav-item" href="/logout">Logout</a>
+  <nav class="navbar is-primary">
+    <div class="container">
+      <div class="navbar-menu">
+        <div class="navbar-brand">
+          <a class="navbar-item" href="/">FCC-Voting</a>
+        </div>
+        <div class="navbar-end">
+          <a class="navbar-item" href="/addpoll">Add poll</a>
+          {{#if user}}
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link is-active" href="#">
+              <p class="navbar-item"><img src="{{avatar}}" />&nbsp; {{user}}
+              </p></a>
+              <div class="navbar-dropdown ">
+                <a class="navbar-item" href="/createdpolls">Created Polls</a>
+                <a class="navbar-item" href="/profile">Profile</a>
+                <hr class="navbar-divider">
+                <a class="navbar-item" href="/logout">Logout</a>
+              </div>
+            </div>
             {{else}}
-            <a class="nav-item" href="/login"> Login</a>
+            <a class="navbar-item" href="/login"> Login</a>
             {{/if}}
           </div>
         </div>
-      </header>
       </div>
+    </nav>
 
+    <section class="hero is-primary is-large">
+      <div class="hero-head">
+        <div class="columns" style="margin-top: 10px;">
+          <div class="column is-half is-offset-one-quarter content">
+            <h1 class="notification is-primary has-text-centered"> {{pollName}}</h1>
+          </div>
+        </div>
+        <div class="columns">
+          <div class="column is-4 is-offset-2">
+            <div class="columns is-multiline is-gapless has-text-centered">
+              {{#each options}}
+              <div class="column is-3"></div>
+              <div class="column is-6">
+                <a href="/poll/voted/{{../id}}/{{@key}}" id="{{optionName}}" class="button is-outlined is-primary is-inverted is-large">{{optionName}}</a>
+              </div>
+              <div class="column is-3"></div>
+              {{/each}}
+            </div>
+          </div>
 
-
-    <div class="columns" style="margin-top: 10px;">
-      <div class="column is-half is-offset-one-quarter content">
-        <h1 class="notification is-primary has-text-centered"> {{pollName}}</h1>
+          <div class="column is-6">
+            <canvas id="pollResults" width="300" height="400"></canvas>
+          </div>
+        </div>
       </div>
-    </div>
-<div class="columns">
-  <div class="column is-4 is-offset-2">
-    <div class="columns is-multiline is-gapless has-text-centered">
-    {{#each options}}
-      <div class="column is-3"></div>
-      <div class="column is-6">
-       <a href="/poll/voted/{{../id}}/{{@key}}" id="{{optionName}}" class="button is-outlined is-primary is-inverted is-large">{{optionName}}</a>
-     </div>
-    <div class="column is-3"></div>
-    {{/each}}
-  </div>
-</div>
+    </section>
+    <footer class="footer">
+      <div class="container">
+        <div class="content has-text-centered">
+          <h6>Created by <a href="#">Jason Luboff</a></h6>
+        </div>
+      </div>
+    </footer>
 
-    <div class="column is-6">
-      <canvas id="pollResults" width="300" height="400"></canvas>
-    </div>
-  </div>
 
-  <footer class="footer">
-  <div class="container">
-    <div class="content has-text-centered">
-      <h6>Created by <a href="#">Jason Luboff</a></h6>
-    </div>
-  </div>
-</footer>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.js"></script>
+    <script>
+    var randomColorGen = () =>  Math.ceil(Math.random() * 255)
+    $.ajax({
+      url: `/voteResults/{{id}}`,
+      method: "GET",
+      success: (data) => {
+        let labels = [];
+        let votes = [];
+        let colors = [];
+        let ctx = document.getElementById('pollResults').getContext('2d');
 
-</section>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.js"></script>
-  <script>
-  var randomColorGen = () =>  Math.ceil(Math.random() * 255)
-  $.ajax({
-    url: `/voteResults/{{id}}`,
-    method: "GET",
-    success: (data) => {
-      let labels = [];
-      let votes = [];
-      let colors = [];
-      let ctx = document.getElementById('pollResults').getContext('2d');
-
-      for(let i in data) {
-        labels.push(data[i].optionName);
-        votes.push(data[i].votes);
-        colors.push('rgba('+ randomColorGen() +', ' + randomColorGen() + ', ' + randomColorGen() +', 1.0)');
-      }
-
-      let chart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: 'Total Votes',
-            data: votes,
-            backgroundColor: colors
-          }]
-        },
-        options: {
-          responsive: false
+        for(let i in data) {
+          labels.push(data[i].optionName);
+          votes.push(data[i].votes);
+          colors.push('rgba('+ randomColorGen() +', ' + randomColorGen() + ', ' + randomColorGen() +', 1.0)');
         }
-      });
-    },
-    error: () => {
-      alert('You have already voted.');
-    }
-  })
-/*  $.getJSON(`/voteResults/{{id}}`, (data) => {
-  let labels = [];
-  let votes = [];
-  let colors = [];
-  let ctx = document.getElementById('pollResults').getContext('2d');
 
-  for(let i in data) {
-    labels.push(data[i].optionName);
-    votes.push(data[i].votes);
-    colors.push('rgba('+ randomColorGen() +', ' + randomColorGen() + ', ' + randomColorGen() +', 1.0)');
-  }
-
-  let chart = new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-      labels: labels,
-      datasets: [{
-        label: 'Total Votes',
-        data: votes,
-        backgroundColor: colors
-      }]
-    },
-    options: {
-      responsive: false
-    }
-  }); */
-//  });
-  </script>
-</body>
-</html>
+        let chart = new Chart(ctx, {
+          type: 'doughnut',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Total Votes',
+              data: votes,
+              backgroundColor: colors
+            }]
+          },
+          options: {
+            responsive: false
+          }
+        });
+      },
+      error: () => {
+        alert('You have already voted.');
+      }
+    })
+    </script>
+  </body>
+  </html>
