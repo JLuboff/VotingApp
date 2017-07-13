@@ -170,7 +170,7 @@ MongoClient.connect(`mongodb://${process.env.MONGOUSER}:${process.env.MONGOPASS}
           options[i] = doc[i]
         }
       };
-      console.log(options.keys());
+      console.log(Object.keys(options));
 
       res.render('viewpoll.hbs', {pollName, options, id, user, avatar});
     })
