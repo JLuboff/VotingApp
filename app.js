@@ -132,7 +132,7 @@ MongoClient.connect(`mongodb://${process.env.MONGOUSER}:${process.env.MONGOPASS}
     res.redirect(`/poll/${req.params.id}`);
 })
 
-app.post('/addoption/:id', isLogged, (req, res) => {
+/*app.post('/addoption/:id', isLogged, (req, res) => {
   db.collection('poll').findOne({'_id': ObjectID(req.params.id)}, {'_id': 0, 'time': 0, 'creator': 0}, (err, doc) => {
     if (err) throw err;
       console.log(doc);
@@ -150,7 +150,7 @@ app.post('/addoption/:id', isLogged, (req, res) => {
   })
   db.collection('poll').updateOne({'_id': ObjectID(req.params.id)}, {'_id': 0, 'time': 0, 'creator': 0}, (err, doc) => {
 
-})
+}) */
 
   app.get('/poll/:id', (req, res) => {
     var user, avatar;
