@@ -7,32 +7,30 @@
 </head>
 <body>
   <nav class="navbar">
-    <div class="container">
-      <div class="navbar-menu">
-        <div class="navbar-start">
-          <a class="navbar-item" href="/">FCC-Voting</a>
-        </div>
-        <div class="navbar-end">
+    <div class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item" href="/">FCC-Voting</a>
+      </div>
+      <div class="navbar-end">
         <a class="navbar-item" href="/addpoll">Add poll</a>
         {{#if user}}
-        <div class="navbar-item has-dropdown">
+        <div class="navbar-item has-dropdown is-hoverable">
           <a class="navbar-link is-active" href="#">
-        <p class="navbar-item"><img src="{{avatar}}" />&nbsp; {{user}}
-        </p></a>
-        <div class="navbar-dropdown ">
-          <a class="navbar-item" href="/createdpolls">Created Polls</a>
-          <a class="navbar-item" href="/profile">Profile</a>
-          <hr class="navbar-divider">
-          <a class="navbar-item" href="/logout">Logout</a>
+            <p class="navbar-item"><img src="{{avatar}}" />&nbsp; {{user}}
+            </p></a>
+            <div class="navbar-dropdown ">
+              <a class="navbar-item" href="/createdpolls">Created Polls</a>
+              <a class="navbar-item" href="/profile">Profile</a>
+              <hr class="navbar-divider">
+              <a class="navbar-item" href="/logout">Logout</a>
+            </div>
+          </div>
+          {{else}}
+          <a class="navbar-item" href="/login"> Login</a>
+          {{/if}}
         </div>
       </div>
-        {{else}}
-        <a class="navbar-item" href="/login"> Login</a>
-        {{/if}}
-      </div>
- </div>
-  </div>
-  </nav>
+    </nav>
 
     <section class="hero is-primary is-fullheight">
       <div class="hero-head">
