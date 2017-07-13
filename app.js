@@ -119,10 +119,6 @@ MongoClient.connect(`mongodb://${process.env.MONGOUSER}:${process.env.MONGOPASS}
 
   app.get('/poll/voted/:id/:key', (req, res) => {
     let url = parseurl(req).pathname;
-    /*  req.session.views = Object.keys(req.session.views).filter(el => !el.includes('/css/style.css'));
-    db.collection('sessions').insertMany(req.session.views); */
-
-    //Use $match if I can get into database
 
     if(Object.keys(req.session.views).filter(el => el.includes(url.slice(0,37))).length > 1 || req.session.views[url] > 1){
 
@@ -132,14 +128,28 @@ MongoClient.connect(`mongodb://${process.env.MONGOUSER}:${process.env.MONGOPASS}
     let option = {};
     option[req.params.key + '.votes'] = 1;
 
-    /*  db.collection('poll').findOne({'_id': ObjectID(req.params.id), 'ipAddresses': {$in: [req.headers['x-forwarded-for']]}}, (err, doc) =>{
-    if(doc) {
+    db.collection('poll').findOneAndUpdate({'_id': ObjectID(req.params.id)}, {$inc: option});
     res.redirect(`/poll/${req.params.id}`);
-  }
-}) */
-db.collection('poll').findOneAndUpdate({'_id': ObjectID(req.params.id)}, {$inc: option});
-    //  db.collection('poll').findOneAndUpdate({'_id': ObjectID(req.params.id)}, {$addToSet: {ipAddresses: req.headers['x-forwarded-for']}});
-    res.redirect(`/poll/${req.params.id}`);
+})
+
+app.post('/addoption/:id', isLogged, (req, res) => {
+  db.collection('poll').findOne({'_id': ObjectID(req.params.id)}, {'_id': 0, 'time': 0, 'creator': 0}, (err, doc) => {
+    if (err) throw err;
+      console.log(doc);
+    let pollName = doc.pollName;
+    let id = req.params.id;
+    let options = {};
+
+    for(let i in doc){
+      if(i !== 'pollName'){
+        options[i] = doc[i]
+      }
+    };
+
+
+  })
+  db.collection('poll').updateOne({'_id': ObjectID(req.params.id)}, {'_id': 0, 'time': 0, 'creator': 0}, (err, doc) => {
+
 })
 
   app.get('/poll/:id', (req, res) => {
@@ -160,6 +170,7 @@ db.collection('poll').findOneAndUpdate({'_id': ObjectID(req.params.id)}, {$inc: 
           options[i] = doc[i]
         }
       };
+      console.log(options.keys());
 
       res.render('viewpoll.hbs', {pollName, options, id, user, avatar});
     })

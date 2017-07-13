@@ -49,6 +49,16 @@
               </div>
               <div class="column is-3"></div>
               {{/each}}
+              {{#if user}}
+              <div class="column is-3"></div>
+              <div class="column is-6">
+                <form action="/addoption/{{id}}"method="POST" enctype="multipart/form-data">
+                  <label class="label">Other: </label><input class="input is-medium" type="text" name="option1" /required>
+                <button class="button is-outlined is-primary is-inverted is-large">Add</button>
+                </form>
+
+              </div>
+              <div class="column is-3"></div>
             </div>
           </div>
 
