@@ -11,9 +11,12 @@ const express = require('express'),
       port = process.env.PORT || 3000;
 
 passport.use(new GitHubStrategy({
-  clientID: process.env.CLIENTID,
-  clientSecret: process.env.CLIENTSECRET,
-  callbackURL: process.env.CALLBACKURL
+  clientID: '77fa317a2ef081047413',
+  clientSecret: '3980498d72be0703a56587dddbe65da702457631',
+  callbackURL: 'http://127.0.0.1:3000/auth/github/callback'
+  //clientID: process.env.CLIENTID,
+  //clientSecret: process.env.CLIENTSECRET,
+  //callbackURL: process.env.CALLBACKURL
 }, (accessToken, refreshToken, profile, cb) => {
     if(profile) {
       user = profile;
@@ -39,7 +42,7 @@ let upload = multer({storage});
 app.set('view engine', 'hbs');
 
 app.use(session({
-  secret: process.env.SESSION,
+  secret: 'potato',
   resave: true,
   saveUnitialized: true
 }));
@@ -70,8 +73,8 @@ const isLogged = (req, res, next) => {
   console.log(`User is not authenticated`);
   return res.redirect('/login');
 };
-
-MongoClient.connect(`mongodb://${process.env.MONGOUSER}:${process.env.MONGOPASS}@ds064299.mlab.com:64299/polls`, (err, db)=>{
+MongoClient.connect('mongodb://localhost:27017/polls', (err, db) => {
+//MongoClient.connect(`mongodb://${process.env.MONGOUSER}:${process.env.MONGOPASS}@ds064299.mlab.com:64299/polls`, (err, db)=>{
 
   if(err) throw err;
 
@@ -98,7 +101,6 @@ MongoClient.connect(`mongodb://${process.env.MONGOUSER}:${process.env.MONGOPASS}
     let poll = {
       time: moment().format(),
       pollName: req.body.pollName,
-      //ipAddresses: []
       creator: req.user.id
     }
 
@@ -130,12 +132,18 @@ MongoClient.connect(`mongodb://${process.env.MONGOUSER}:${process.env.MONGOPASS}
 
     db.collection('poll').findOneAndUpdate({'_id': ObjectID(req.params.id)}, {$inc: option});
     res.redirect(`/poll/${req.params.id}`);
-})
+  })
 
-/*app.post('/addoption/:id', isLogged, (req, res) => {
+  app.post('/addoption/:id', isLogged, upload.array(), (req, res) => {
+  var user, avatar;
+  if(req.user !== undefined){ console.log(`Not undefined: ${req.user._json.name}`);
+  user = req.user._json.name;
+  avatar = req.user._json.avatar_url;};
+  let optionName = req.body.userAdded;
+
   db.collection('poll').findOne({'_id': ObjectID(req.params.id)}, {'_id': 0, 'time': 0, 'creator': 0}, (err, doc) => {
     if (err) throw err;
-      console.log(doc);
+
     let pollName = doc.pollName;
     let id = req.params.id;
     let options = {};
@@ -146,11 +154,18 @@ MongoClient.connect(`mongodb://${process.env.MONGOUSER}:${process.env.MONGOPASS}
       }
     };
 
+    let optionsArray = Object.keys(options);
 
+    let opNum = Number(optionsArray[optionsArray.length - 1].slice(-1)) + 1;
+
+    let newOption = 'option' + opNum;
+    let insert = {[newOption]: {votes: 0, optionName: optionName}};
+
+    db.collection('poll').findOneAndUpdate({'_id': ObjectID(req.params.id)},{$set: insert});
+
+    res.redirect(`/poll/${req.params.id}`);
   })
-  db.collection('poll').updateOne({'_id': ObjectID(req.params.id)}, {'_id': 0, 'time': 0, 'creator': 0}, (err, doc) => {
-
-}) */
+})
 
   app.get('/poll/:id', (req, res) => {
     var user, avatar;
@@ -160,7 +175,7 @@ MongoClient.connect(`mongodb://${process.env.MONGOUSER}:${process.env.MONGOPASS}
 
     db.collection('poll').findOne({'_id': ObjectID(req.params.id)}, {'_id': 0, 'time': 0, 'creator': 0}, (err, doc) => {
       if (err) throw err;
-        console.log(doc);
+
       let pollName = doc.pollName;
       let id = req.params.id;
       let options = {};
@@ -170,10 +185,6 @@ MongoClient.connect(`mongodb://${process.env.MONGOUSER}:${process.env.MONGOPASS}
           options[i] = doc[i]
         }
       };
-
-      let optionsArray = Object.keys(options);
-      let newOption = optionsArray[optionsArray.length - 1].slice(-1);
-      console.log(Object.keys(newOption));
 
       res.render('viewpoll.hbs', {pollName, options, id, user, avatar});
     })
@@ -220,6 +231,23 @@ MongoClient.connect(`mongodb://${process.env.MONGOUSER}:${process.env.MONGOPASS}
 
       res.render('createdpolls.hbs', {data, user, avatar});
     })
+  })
+
+  app.get('/profile', isLogged, (req, res) => {
+    var user, avatar;
+    user = req.user._json.name;
+    avatar = req.user._json.avatar_url;
+    let id = req.user.id;
+
+    db.collection('poll').find({creator: id}).toArray((err, doc) => {
+      if(err) throw err;
+      let pollCount = doc.length
+      let repos = req.user._json.public_repos;
+      let followers = req.user._json.followers;
+
+    res.render('profile.hbs', {user, avatar, pollCount, repos, followers});
+
+});
   })
 
   app.listen(port, () => {
