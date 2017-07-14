@@ -7,32 +7,32 @@
 </head>
 <body>
   <div class="container">
-  <nav class="navbar">
-    <div class="navbar-menu">
-      <div class="navbar-start">
-        <a class="navbar-item" href="/">FCC-Voting</a>
-      </div>
-      <div class="navbar-end">
-        <a class="navbar-item" href="/addpoll">Add poll</a>
-        {{#if user}}
-        <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link is-active" href="#">
-            <p class="navbar-item"><img src="{{avatar}}" />&nbsp; {{user}}
-            </p></a>
-            <div class="navbar-dropdown ">
-              <a class="navbar-item" href="/createdpolls">Created Polls</a>
-              <a class="navbar-item" href="/profile">Profile</a>
-              <hr class="navbar-divider">
-              <a class="navbar-item" href="/logout">Logout</a>
-            </div>
-          </div>
-          {{else}}
-          <a class="navbar-item" href="/login"> Login</a>
-          {{/if}}
+    <nav class="navbar">
+      <div class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item" href="/">FCC-Voting</a>
         </div>
-      </div>
-    </nav>
-  </div>
+        <div class="navbar-end">
+          <a class="navbar-item" href="/addpoll">Add poll</a>
+          {{#if user}}
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link is-active" href="#">
+              <p class="navbar-item"><img src="{{avatar}}" />&nbsp; {{user}}
+              </p></a>
+              <div class="navbar-dropdown ">
+                <a class="navbar-item" href="/createdpolls">Created Polls</a>
+                <a class="navbar-item" href="/profile">Profile</a>
+                <hr class="navbar-divider">
+                <a class="navbar-item" href="/logout">Logout</a>
+              </div>
+            </div>
+            {{else}}
+            <a class="navbar-item" href="/login"> Login</a>
+            {{/if}}
+          </div>
+        </div>
+      </nav>
+    </div>
 
     <section class="hero is-primary is-fullheight">
       <div class="hero-head">
@@ -41,25 +41,23 @@
             <h1 class="notification is-primary has-text-centered"> All polls created by: {{user}}</h1>
           </div>
         </div>
-        <div class="columns is-multiline is-gapless has-text-centered">
+        <div class="columns is-multiline is-gapless has-text-centered" style="margin-bottom: 20px;">
           {{#each data}}
           <div class="column is-3"></div>
           <div class="column is-6">
             <a class="button is-large is-inverted is-primary is-outlined" href="/poll/{{_id}}"> {{pollName}} </a>
             <span class="tag">Delete<a class="delete" href="/deletepoll/{{_id}}"></a></span>
-
           </div>
           <div class="column is-3"></div>
-
           {{/each}}
         </div>
-
       </div>
     </section>
+
     <footer class="footer">
       <div class="container">
         <div class="content has-text-centered">
-          <h6>Created by <a href="#">Jason Luboff</a></h6>
+          <h6>Created by <a href="https://codepen.io/jluboff/full/yJNrPd/">Jason Luboff</a></h6>
         </div>
       </div>
     </footer>

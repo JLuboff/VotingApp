@@ -7,71 +7,72 @@
 </head>
 <body>
   <div class="container">
-  <nav class="navbar">
-    <div class="navbar-menu">
-      <div class="navbar-start">
-        <a class="navbar-item" href="/">FCC-Voting</a>
-      </div>
-      <div class="navbar-end">
-        <a class="navbar-item" href="/addpoll">Add poll</a>
-        {{#if user}}
-        <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link is-active" href="#">
-            <p class="navbar-item"><img src="{{avatar}}" />&nbsp; {{user}}
-            </p></a>
-            <div class="navbar-dropdown ">
-              <a class="navbar-item" href="/createdpolls">Created Polls</a>
-              <a class="navbar-item" href="/profile">Profile</a>
-              <hr class="navbar-divider">
-              <a class="navbar-item" href="/logout">Logout</a>
+    <nav class="navbar">
+      <div class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item" href="/">FCC-Voting</a>
+        </div>
+        <div class="navbar-end">
+          <a class="navbar-item" href="/addpoll">Add poll</a>
+          {{#if user}}
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link is-active" href="#">
+              <p class="navbar-item"><img src="{{avatar}}" />&nbsp; {{user}}
+              </p></a>
+              <div class="navbar-dropdown ">
+                <a class="navbar-item" href="/createdpolls">Created Polls</a>
+                <a class="navbar-item" href="/profile">Profile</a>
+                <hr class="navbar-divider">
+                <a class="navbar-item" href="/logout">Logout</a>
+              </div>
             </div>
+            {{else}}
+            <a class="navbar-item" href="/login"> Login</a>
+            {{/if}}
           </div>
-          {{else}}
-          <a class="navbar-item" href="/login"> Login</a>
-          {{/if}}
+        </div>
+      </nav>
+    </div>
+
+    <section class="hero is-primary is-fullheight">
+      <div class="hero-head">
+        <div class="columns">
+          <div class="column is-6 is-offset-3 content">
+            <h2 class="notification is-primary has-text-centered"> Create Poll </h2>
+          </div>
+        </div>
+        <div class="columns">
+          <div class="column is-6 is-offset-3 content">
+            <form method="POST" enctype="multipart/form-data">
+              <div class="form control">
+                <label class="label">Poll Name: </label><input class="input is-medium" type="text" name="pollName" /required>
+                <label class="label">Option 1: </label><input class="input is-medium" type="text" name="option1" /required>
+                <label class="label">Option 2: </label><input class="input is-medium" type="text" name="option2" /required>
+              </div>
+              <button class="button is-primary is-inverted is-outlined is-medium" style="margin-top: 10px;">Create Poll</button>
+            </form>
+          </div>
+        </div>
+        <div class="columns">
+          <div class="column is-1 is-offset-3 content">
+            <button id="add" class="button is-primary is-inverted is-outlined"  style="margin-bottom: 25px;"> Additional Option</button>
+          </div>
+          <div class="column is-1 content">
+            <button id="remove" class="button is-primary is-inverted is-outlined"  style="margin-bottom: 25px; visibility: hidden;"> Remove Option</button>
+          </div>
         </div>
       </div>
-    </nav>
-  </div>
+    </section>
 
-  <section class="hero is-primary is-fullheight">
-    <div class="hero-head">
-  <div class="columns">
-    <div class="column is-6 is-offset-3 content">
-    <h2 class="notification is-primary has-text-centered"> Create Poll </h2>
-  </div>
-</div>
-<div class="columns">
-  <div class="column is-6 is-offset-3 content">
-<form method="POST" enctype="multipart/form-data">
-  <div class="form control">
-  <label class="label">Poll Name: </label><input class="input is-medium" type="text" name="pollName" /required>
-  <label class="label">Option 1: </label><input class="input is-medium" type="text" name="option1" /required>
-  <label class="label">Option 2: </label><input class="input is-medium" type="text" name="option2" /required>
-</div>
-<button class="button is-primary is-inverted is-outlined is-medium" style="margin-top: 10px;">Create Poll</button>
-</form>
+    <footer class="footer">
+      <div class="container">
+        <div class="content has-text-centered">
+          <h6>Created by <a href="https://codepen.io/jluboff/full/yJNrPd/">Jason Luboff</a></h6>
+        </div>
+      </div>
+    </footer>
 
-</div>
-</div>
-<div class="columns">
-  <div class="column is-6 is-offset-3 content">
-<button id="add" class="button is-primary is-inverted is-outlined"  style="margin-bottom: 25px;"> Additional Option</button>
-</div>
-</div>
-
-</div>
-</section>
-<footer class="footer">
-<div class="container">
-  <div class="content has-text-centered">
-    <h6>Created by <a href="#">Jason Luboff</a></h6>
-  </div>
-</div>
-</footer>
-
-
-<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
-<script src="./js/addpoll.js"></script>
-</body>
-</html>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
+    <script src="./js/addpoll.js"></script>
+  </body>
+  </html>

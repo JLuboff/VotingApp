@@ -7,78 +7,75 @@
 </head>
 <body>
   <div class="container">
-  <nav class="navbar">
-    <div class="navbar-menu">
-      <div class="navbar-start">
-        <a class="navbar-item" href="/">FCC-Voting</a>
-      </div>
-      <div class="navbar-end">
-        <a class="navbar-item" href="/addpoll">Add poll</a>
-        {{#if user}}
-        <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link is-active" href="#">
-            <p class="navbar-item"><img src="{{avatar}}" />&nbsp; {{user}}
-            </p></a>
-            <div class="navbar-dropdown ">
-              <a class="navbar-item" href="/createdpolls">Created Polls</a>
-              <a class="navbar-item" href="/profile">Profile</a>
-              <hr class="navbar-divider">
-              <a class="navbar-item" href="/logout">Logout</a>
+    <nav class="navbar">
+      <div class="navbar-menu">
+        <div class="navbar-start">
+          <a class="navbar-item" href="/">FCC-Voting</a>
+        </div>
+        <div class="navbar-end">
+          <a class="navbar-item" href="/addpoll">Add poll</a>
+          {{#if user}}
+          <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link is-active" href="#">
+              <p class="navbar-item"><img src="{{avatar}}" />&nbsp; {{user}}
+              </p></a>
+              <div class="navbar-dropdown ">
+                <a class="navbar-item" href="/createdpolls">Created Polls</a>
+                <a class="navbar-item" href="/profile">Profile</a>
+                <hr class="navbar-divider">
+                <a class="navbar-item" href="/logout">Logout</a>
+              </div>
+            </div>
+            {{else}}
+            <a class="navbar-item" href="/login"> Login</a>
+            {{/if}}
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <section class="hero is-primary is-fullheight">
+      <div class="hero-head">
+        <div class="columns">
+          <div class="column is-6 is-offset-3 content">
+            <h2 class="notification is-primary has-text-centered"> {{user}}'s Profile </h2>
+          </div>
+        </div>
+        <div class="columns">
+          <div class="column is-6 is-offset-3">
+            <div class="box">
+              <div class="media">
+                <div class="media-left">
+                  <figure class="image is-128x128">
+                    <img src="{{avatar}}" /> <br />
+                  </figure>
+                </div>
+                <div class="media-content">
+                  <div class="content">
+
+                    <p><h4>Number of Polls: <strong>{{pollCount}}</strong> <br />
+                      Number of Repos: <strong>{{repos}}</strong> <br />
+                      Number of Followers: <strong>{{followers}}</strong></h4>
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-          {{else}}
-          <a class="navbar-item" href="/login"> Login</a>
-          {{/if}}
         </div>
       </div>
-    </nav>
-  </div>
+    </section>
 
-  <section class="hero is-primary is-fullheight">
-    <div class="hero-head">
-  <div class="columns">
-    <div class="column is-6 is-offset-3 content">
-    <h2 class="notification is-primary has-text-centered"> {{user}}'s Profile </h2>
-  </div>
-</div>
-
-<div class="columns">
-  <div class="column is-6 is-offset-3">
-    <div class="box">
-      <div class="media">
-        <div class="media-left">
-          <figure class="image is-128x128">
-          <img src="{{avatar}}" /> <br />
-        </figure>
-      </div>
-        <div class="media-content">
-          <div class="content">
-
-            <p><h4>Number of Polls: <strong>{{pollCount}}</strong> <br />
-               Number of Repos: <strong>{{repos}}</strong> <br />
-               Number of Followers: <strong>{{followers}}</strong></h4>
-            </p>
-          </div>
+    <footer class="footer">
+      <div class="container">
+        <div class="content has-text-centered">
+          <h6>Created by <a href="https://codepen.io/jluboff/full/yJNrPd/">Jason Luboff</a></h6>
         </div>
       </div>
-    </div>
-  </div>
-</div>
+    </footer>
 
 
-
-</div>
-</section>
-<footer class="footer">
-<div class="container">
-  <div class="content has-text-centered">
-    <h6>Created by <a href="#">Jason Luboff</a></h6>
-  </div>
-</div>
-</footer>
-
-
-<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
-<script src="./js/addpoll.js"></script>
-</body>
-</html>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
+    <script src="./js/addpoll.js"></script>
+  </body>
+  </html>
