@@ -2,10 +2,11 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Create Poll</title>
+  <title>{{user}}'s Profile</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.4.3/css/bulma.css" type="text/css" rel="stylesheet">
 </head>
 <body>
+  <div class="container">
   <nav class="navbar">
     <div class="navbar-menu">
       <div class="navbar-start">
@@ -31,14 +32,39 @@
         </div>
       </div>
     </nav>
+  </div>
 
   <section class="hero is-primary is-fullheight">
     <div class="hero-head">
   <div class="columns">
     <div class="column is-6 is-offset-3 content">
-    <h2> Create Poll </h2>
+    <h2 class="notification is-primary has-text-centered"> {{user}}'s Profile </h2>
   </div>
 </div>
+
+<div class="columns">
+  <div class="column is-6 is-offset-3">
+    <div class="box">
+      <div class="media">
+        <div class="media-left">
+          <figure class="image is-128x128">
+          <img src="{{avatar}}" /> <br />
+        </figure>
+      </div>
+        <div class="media-content">
+          <div class="content">
+
+            <p><h4>Number of Polls: <strong>{{pollCount}}</strong> <br />
+               Number of Repos: <strong>{{repos}}</strong> <br />
+               Number of Followers: <strong>{{followers}}</strong></h4>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 
 </div>
