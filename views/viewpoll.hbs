@@ -105,7 +105,6 @@
             votes = [],
             colors = [],
             ctx = document.getElementById('pollResults').getContext('2d');
-            localStorage.setItem('prevColors', colors);
         for(let i in data) {
           labels.push(data[i].optionName);
           votes.push(data[i].votes);
@@ -115,6 +114,7 @@
         if(!localStorage.getItem('prevColors')){
           colors = localStorage.getItem('prevColors');
         };
+        localStorage.setItem('prevColors', colors);
         console.log(colors);
         let chart = new Chart(ctx, {
           type: 'doughnut',
