@@ -132,7 +132,6 @@ module.exports = (app, passport, db) => {
       if (err) throw err;
 
       let voted = req.flash('voted');
-      console.log(voted);
       let pollName = doc.pollName;
       let id = req.params.id;
       let options = {};
@@ -150,7 +149,6 @@ module.exports = (app, passport, db) => {
   app.route('/prevvoted/:id')
   .get((req, res) => {
     req.flash('voted', 'Sorry, you\'ve already voted!');
-    console.log('You\'ve voted');
     res.redirect(`/poll/${req.params.id}`);
   });
 
