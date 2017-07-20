@@ -19,6 +19,7 @@
   "homepage": "https://github.com/JLuboff/VotingApp#readme",
   "dependencies": {
     "bulma": "^0.4.3",
+    "connect-flash": "^0.1.1",
     "express": "^4.15.3",
     "express-session": "^1.15.3",
     "hbs": "^4.0.1",
