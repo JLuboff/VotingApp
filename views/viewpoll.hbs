@@ -40,17 +40,10 @@
           <div class="column is-half is-offset-one-quarter content">
             <h1 class="notification is-primary has-text-centered"> {{pollName}}<br>
             {{#if voted}}
-            {{voted}}
+            <span class="tag is-danger">{{voted}}</span>
               {{/if}}
           </div>
         </div>
-      <!--  {{#if voted}}
-          <div class="columns">
-            <div class="column is-half is-offset-one-quarter content">
-              <h2 class="notification is-primary has-text-centered"> {{voted}} </h1>
-              </div>
-            </div>
-            {{/if}} -->
         <div class="columns">
           <div class="column is-4 is-offset-2">
             <div class="columns is-multiline is-gapless has-text-centered">
