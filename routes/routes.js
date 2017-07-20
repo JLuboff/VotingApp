@@ -147,11 +147,12 @@ module.exports = (app, passport, db) => {
     })
   });
 
-  app.route('/prevvoted/:id', (req, res) => {
+  app.route('/prevvoted/:id')
+  .get((req, res) => {
     req.flash('voted', 'Sorry, you\'ve already voted!');
     console.log('You\'ve voted');
     res.redirect(`/poll/${req.params.id}`);
-  })
+  });
 
   app.route('/poll/voted/:id/:key')
   .get((req, res) => {
