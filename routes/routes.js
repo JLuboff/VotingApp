@@ -5,6 +5,7 @@ const multer = require('multer'),
       moment = require('moment');
 let storage = multer.diskStorage({});
 let upload = multer({storage});
+let randomColorGen = () =>  Math.ceil(Math.random() * 255)
 
 module.exports = (app, passport, db) => {
 
