@@ -96,22 +96,26 @@
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.js"></script>
     <script>
-    //var randomColorGen = () =>  Math.ceil(Math.random() * 255)
+    var randomColorGen = () =>  Math.ceil(Math.random() * 255)
     $.ajax({
       url: `/voteResults/{{id}}`,
       method: "GET",
       success: (data) => {
-        let labels = [];
-        let votes = [];
-        let colors = {{colors}};
-        let ctx = document.getElementById('pollResults').getContext('2d');
-        console.log(colors);
+        let labels = [],
+            votes = [],
+            colors = [],
+            ctx = document.getElementById('pollResults').getContext('2d');
+            localStorage.setItem('prevColors', colors);
         for(let i in data) {
           labels.push(data[i].optionName);
           votes.push(data[i].votes);
-        //  colors.push('rgba('+ randomColorGen() +', ' + randomColorGen() + ', ' + randomColorGen() +', 1.0)');
+          colors.push('rgba('+ randomColorGen() +', ' + randomColorGen() + ', ' + randomColorGen() +', 1.0)');
         }
 
+        if(!localStorage.getItem('prevColors')){
+          colors = localStorage.getItem('prevColors');
+        };
+        console.log(colors);
         let chart = new Chart(ctx, {
           type: 'doughnut',
           data: {

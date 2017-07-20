@@ -5,7 +5,6 @@ const multer = require('multer'),
       moment = require('moment');
 let storage = multer.diskStorage({});
 let upload = multer({storage});
-let randomColorGen = () =>  Math.ceil(Math.random() * 255)
 
 module.exports = (app, passport, db) => {
 
@@ -136,12 +135,10 @@ module.exports = (app, passport, db) => {
       let pollName = doc.pollName;
       let id = req.params.id;
       let options = {};
-      let colors = [];
 
       for(let i in doc){
         if(i !== 'pollName'){
-          options[i] = doc[i],
-          colors.push('rgba('+ randomColorGen() +', ' + randomColorGen() + ', ' + randomColorGen() +', 1.0)');
+          options[i] = doc[i]
         }
       };
 
