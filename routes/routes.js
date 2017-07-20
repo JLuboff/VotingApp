@@ -142,7 +142,7 @@ module.exports = (app, passport, db) => {
         }
       };
 
-      res.render('viewpoll.hbs', {pollName, options, id, user, avatar, voted, colors});
+      res.render('viewpoll.hbs', {pollName, options, id, user, avatar, voted});
     })
   });
 
