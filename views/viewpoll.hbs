@@ -111,11 +111,11 @@
           colors.push('rgba('+ randomColorGen() +', ' + randomColorGen() + ', ' + randomColorGen() +', 1.0)');
         }
 
-        if(!localStorage.getItem('prevColors')){
+      /*  if(!localStorage.getItem('prevColors')){
           colors = localStorage.getItem('prevColors');
         };
         localStorage.setItem('prevColors', colors);
-        console.log(colors);
+        console.log(colors); */
         let chart = new Chart(ctx, {
           type: 'doughnut',
           data: {
