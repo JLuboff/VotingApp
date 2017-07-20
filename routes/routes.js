@@ -1,6 +1,7 @@
 const multer = require('multer'),
       ObjectID = require('mongodb').ObjectID,
       parseurl = require('parseurl'),
+      flash = require('connect-flash'),
       moment = require('moment');
 let storage = multer.diskStorage({});
 let upload = multer({storage});
@@ -130,6 +131,7 @@ module.exports = (app, passport, db) => {
     db.collection('poll').findOne({'_id': ObjectID(req.params.id)}, {'_id': 0, 'time': 0, 'creator': 0}, (err, doc) => {
       if (err) throw err;
 
+      let voted = req.flash('voted');
       let pollName = doc.pollName;
       let id = req.params.id;
       let options = {};
@@ -140,9 +142,14 @@ module.exports = (app, passport, db) => {
         }
       };
 
-      res.render('viewpoll.hbs', {pollName, options, id, user, avatar});
+      res.render('viewpoll.hbs', {pollName, options, id, user, avatar, voted});
     })
   });
+
+  app.route('/prevvoted/:id', (req, res) => {
+    req.flash('voted', 'Sorry, you\'ve already voted!');
+    res.redirect(`/poll/${req.params.id}`);
+  })
 
   app.route('/poll/voted/:id/:key')
   .get((req, res) => {
@@ -150,7 +157,7 @@ module.exports = (app, passport, db) => {
 
     if(Object.keys(req.session.views).filter(el => el.includes(url.slice(0,37))).length > 1 || req.session.views[url] > 1){
 
-      return res.redirect(`/poll/${req.params.id}`);
+      return res.redirect(`/prevvoted/${req.params.id}`);
     }
 
     let option = {};

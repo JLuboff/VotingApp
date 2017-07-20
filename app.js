@@ -4,6 +4,7 @@ const express = require('express'),
       MongoClient = require('mongodb').MongoClient,
       session = require('express-session'),
       parseurl = require('parseurl'),
+      flash = require('connect-flash'),
       passport = require('passport'),
       GitHubStrategy = require('passport-github').Strategy,
       port = process.env.PORT || 3000;
@@ -38,6 +39,7 @@ app.use(session({
   resave: true,
   saveUnitialized: true
 }));
+app.use(flash());
 app.use((req, res, next) => {
 
   let views = req.session.views;
