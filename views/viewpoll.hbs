@@ -38,15 +38,19 @@
       <div class="hero-head">
         <div class="columns" style="margin-top: 10px;">
           <div class="column is-half is-offset-one-quarter content">
-            <h1 class="notification is-primary has-text-centered"> {{pollName}}<br>
-            {{#if voted}}
-            <span class="tag is-danger">{{voted}}</span>
-              {{/if}}
+            <h1 class="notification is-primary has-text-centered"> {{pollName}}
           </div>
         </div>
         <div class="columns">
           <div class="column is-4 is-offset-2">
             <div class="columns is-multiline is-gapless has-text-centered">
+              <div class="column is-3"></div>
+              <div class="column is-6">
+                {{#if voted}}
+                <span class="tag is-danger">{{voted}}</span>
+                  {{/if}}
+                </div>
+                <div class="column is-3"></div>               
               {{#each options}}
               <div class="column is-3"></div>
               <div class="column is-6">
