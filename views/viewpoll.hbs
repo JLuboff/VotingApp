@@ -103,9 +103,9 @@
       success: (data) => {
         let labels = [];
         let votes = [];
-      //  let colors = [];
+        let colors = {{colors}};
         let ctx = document.getElementById('pollResults').getContext('2d');
-
+        console.log(colors);
         for(let i in data) {
           labels.push(data[i].optionName);
           votes.push(data[i].votes);
@@ -119,7 +119,7 @@
             datasets: [{
               label: 'Total Votes',
               data: votes,
-              backgroundColor: {{colors}}
+              backgroundColor: colors
             }]
           },
           options: {
