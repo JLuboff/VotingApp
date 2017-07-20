@@ -135,14 +135,16 @@ module.exports = (app, passport, db) => {
       let pollName = doc.pollName;
       let id = req.params.id;
       let options = {};
+      let colors = [];
 
       for(let i in doc){
         if(i !== 'pollName'){
-          options[i] = doc[i]
+          options[i] = doc[i],
+          colors.push('rgba('+ randomColorGen() +', ' + randomColorGen() + ', ' + randomColorGen() +', 1.0)');
         }
       };
 
-      res.render('viewpoll.hbs', {pollName, options, id, user, avatar, voted});
+      res.render('viewpoll.hbs', {pollName, options, id, user, avatar, voted, colors});
     })
   });
 
