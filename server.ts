@@ -3,7 +3,6 @@ import express, { Application } from "express";
 import cors, { CorsOptions } from "cors";
 import uuidv4 from "uuid/v4";
 import routes from "./routes/routes";
-import hbs from "hbs";
 import session from "express-session";
 import passport from "passport";
 import { Strategy } from "passport-github";
@@ -18,8 +17,8 @@ const corsOptions: CorsOptions = {
   credentials: true
 };
 const passportConfig : _StrategyOptionsBase = {
-  clientID: process.env.CLIENTID,
-  clientSecret: process.env.CLIENTSECRET,
+  clientID: process.env.CLIENTID!,
+  clientSecret: process.env.CLIENTSECRET!,
   callbackURL: process.env.CALLBACKURL
 }
 passport.use(

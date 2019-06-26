@@ -19,11 +19,12 @@ const corsOptions = {
     optionsSuccessStatus: 200,
     credentials: true
 };
-passport_1.default.use(new passport_github_1.Strategy({
+const passportConfig = {
     clientID: process.env.CLIENTID,
     clientSecret: process.env.CLIENTSECRET,
     callbackURL: process.env.CALLBACKURL
-}, (accessToken, refreshToken, profile, cb) => {
+};
+passport_1.default.use(new passport_github_1.Strategy(passportConfig, (accessToken, refreshToken, profile, cb) => {
     if (profile) {
         const user = profile;
         return cb(null, user);
@@ -52,7 +53,7 @@ app.use((req, res, next) => {
     if (!views) {
         views = req.session.views = {};
     }
-    let pathname = parseurl_1.default(req).pathname;
+    const pathname = parseurl_1.default(req).pathname;
     views[pathname] = (views[pathname] || 0) + 1;
     next();
 });
